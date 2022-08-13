@@ -6,11 +6,14 @@ if [[ -n "${GIT_PILE_VERBOSE:-}" ]]; then
   set -x
 fi
 
-readonly commit_to_rebase=${1:-HEAD}
-branch_name="${GIT_PILE_PREFIX:-}$(git show --no-patch --format=%f "$commit_to_rebase" | tr '[:upper:]' '[:lower:]')"
+readonly ref_to_rebase=${1:-HEAD}
+branch_name="${GIT_PILE_PREFIX:-}$(git show --no-patch --format=%f "$ref_to_rebase" | tr '[:upper:]' '[:lower:]')"
 if ! git show-ref --quiet "$branch_name"; then
-  echo "error: branch '$branch_name' doesn't exist" >&2
-  exit 1
+  branch_name="${ref_to_rebase}"
+  if ! git show-ref --quiet "$branch_name"; then
+    echo "error: branch '$branch_name' doesn't exist" >&2
+    exit 1
+  fi
 fi
 
 worktree_dir="$(git pileworktreepath)"
