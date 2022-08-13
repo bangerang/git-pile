@@ -132,7 +132,7 @@ elif git -C "$worktree_dir" push --quiet --set-upstream origin "$branch_name" 2>
       fi
       body_args=(--title "$subject" --body "$body")
     fi
-    url=$(gh pr create "${body_args[@]}" --base "$remote_branch_name" "$@" | grep github.com)
+    # url=$(gh pr create "${body_args[@]}" --base "$remote_branch_name" "$@" | grep github.com)
     native_open "$url"
     popd >/dev/null
   else
