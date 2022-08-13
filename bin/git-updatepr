@@ -13,7 +13,7 @@ fi
 
 export GIT_SEQUENCE_EDITOR=true
 
-readonly commit_to_update=$1
+readonly ref_to_update=$1
 shift
 
 squash=false
@@ -32,15 +32,15 @@ done
 new_refspec=$(git rev-parse "${1:-HEAD}")
 base_refspec=$(git rev-parse HEAD)
 
-if ! git cat-file -e "$commit_to_update" 2> /dev/null; then
-  echo "error: invalid commit sha: '$commit_to_update'" >&2
+if ! git cat-file -e "$ref_to_update" 2> /dev/null; then
+  echo "error: invalid commit sha: '$ref_to_update'" >&2
   exit 1
 fi
 
 
-branch_name="${commit_to_update}"
+branch_name="${ref_to_update}"
 if ! git show-ref --quiet "$branch_name"; then
-  branch_name="${GIT_PILE_PREFIX:-}$(git show --no-patch --format=%f "$commit_to_update" | tr '[:upper:]' '[:lower:]')"
+  branch_name="${GIT_PILE_PREFIX:-}$(git show --no-patch --format=%f "$ref_to_update" | tr '[:upper:]' '[:lower:]')"
   if ! git show-ref --quiet "$branch_name"; then
     echo "error: branch '$branch_name' doesn't exist" >&2
     exit 1
