@@ -36,6 +36,12 @@ if [[ $# -gt 0 ]]; then
     shift
     shift
   fi
+
+  if [[ ${1:-} == "--title" ]]; then
+    # Need extglob for the pattern to replace
+    shopt -s extglob
+    branch_name="$(echo ${GIT_PILE_PREFIX:-}${2//+([^[:alnum:]])/-} | tr '[:upper:]' '[:lower:]')"
+  fi
 fi
 
 commit="$(git rev-parse "$commit_arg")"
