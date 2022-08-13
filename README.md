@@ -50,9 +50,12 @@ changes while still on the main branch.
 - You can pass a different sha for submitting a PR for an older commit
   on the branch (by default `HEAD` is used). This is for the case where
   you forget to submit a PR for a commit, and then make a new commit on
-  top of it.
+  top of it. You can also pass a range of commits to cherry-pick multiple
+  commit for a PR: `abc123^..bbc123`. Or just a lower bound to include
+  everything between the lower bound and `HEAD`: `git submitpr $(git rev-parse HEAD~1)^..`
 - All other options passed to `git submitpr` are passed through to the
-  underlying `gh pr create` invocation
+  underlying `gh pr create` invocation. If you pass `--title` that value will
+  be used for the branch name.
 - You can stack a PR using the `--onto` flag. For example: `git submitpr
   --onto head~2`
 - TODO: support auto-merge with `gh`
@@ -68,7 +71,7 @@ $ # get some code review feedback
 $ # make more changes
 $ git add -A
 $ git commit -m "I fixed the code review issue"
-$ git updatepr abc123 # pass the sha of the local commit from the original the PR
+$ git updatepr abc123 # pass the sha of the local commit from the original the PR or the branch name. 
 ```
 
 This will push the new commit to the PR you created originally.
@@ -169,15 +172,10 @@ $ git rebasepr abc123 # the sha of the PR you want to rebase
 
 ## Installation
 
-### On macOS with [homebrew](https://brew.sh)
-
-```
-brew install keith/formulae/git-pile
-```
-
-### Manually
-
-1. Add this repo's `bin` directory to your `PATH`
+1. Add this repo's `bin` directory to your `PATH`:
+   ```bash
+   export PATH=$PATH:/path/to/bin/folder
+   ```
 2. Install [gh](https://cli.github.com/)
 3. Install [fzy](https://github.com/jhawthorn/fzy) and `python3`
    (required for [`git-absorb`](#git-absorb))
